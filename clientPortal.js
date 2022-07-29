@@ -1,5 +1,3 @@
-const { FindCursor } = require("mongodb");
-
 //Turn on load animation and hide main content until loaded.
 document.getElementById('pageTitle').style.display = "none";
 document.getElementById('mainSection').style.display = "none";
