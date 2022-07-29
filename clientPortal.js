@@ -1,3 +1,5 @@
+const { FindCursor } = require("mongodb");
+
 //Turn on load animation and hide main content until loaded.
 document.getElementById('pageTitle').style.display = "none";
 document.getElementById('mainSection').style.display = "none";
@@ -35,6 +37,7 @@ function populatePage(data) {
     document.getElementById('services1').innerHTML = services[0];
     document.getElementById('services2').innerHTML = services[1];
     document.getElementById('hrsOfService').innerHTML = data.hrsOfService
+    await showNotices(data.clientName)
     //more to come as we get more data
     showPage()
 }
@@ -52,4 +55,41 @@ function showErrorMsg(err) {
 		document.getElementById('loadingAnimation').style.display = "none"
     document.getElementById('errorMessage').innerHTML = `There was and error: ${err} when retrieving the data`
     document.getElementById('errorMessageSection').style.display = "block"
+}
+//retrieves and displays notices
+async function showNotices(name) {
+  const url = 'https://pffm.azurewebsites.net/notices'
+  const uri = `${url}/?name=${name}`
+  console.log(uri)
+  fetch(uri)
+    .then(response => response.json())
+    .then(data => fillNotices(data))
+}
+
+function fillNotices(notices) {
+  const topNotices = sortNotices(notices)
+  for (i = 0; i < 4; i++) {
+    document.getElementById(`message${i}`).innerHTML = topNotices[i]
+  }
+} 
+
+function sortNotices(notices) {
+  let topNotices = []
+  const dateArray = convertToDates(notices)
+  const sort = dateArray.sort()
+  for (let i = 0; i < 4; i++) {
+    for (let j = 0; j < sort.length; j++) {
+      if (notices[j] == sort[i]) {
+        topNotices.push(notices[i].message)
+        j = sort.length
+      }
+    }
+  }
+  return topNotices
+}
+
+function convertToDates(notices) {
+  let dates = []
+  notices.forEach((notice) => dates.push(notice.date))
+  return dates
 }
