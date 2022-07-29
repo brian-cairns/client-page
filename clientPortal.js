@@ -2,10 +2,10 @@
 document.getElementById('pageTitle').style.display = "none";
 document.getElementById('mainSection').style.display = "none";
 document.getElementById('sessionsSection').style.display = "none";
+document.getElementById('noticesSection').style.display = "none";
 
 //Get the data to populate the field
-let userName = "Lennox Cairns"
-//sessionStorage.getItem('userName');
+sessionStorage.getItem('userName');
 document.getElementById('clientName').innerHTML = userName
 const url = 'https://pffm.azurewebsites.net/client'
 const uri = `${url}/?name=${userName}`
@@ -17,7 +17,7 @@ fetch(uri)
     //.catch(err => showErrorMsg(err))
 
 //Populate the portal
-function populatePage(data) {
+async function populatePage(data) {
     let services = data.services.split(' ')
     console.log(services)
     document.getElementById('caregiverName').innerHTML = data.caregiverName;
@@ -46,6 +46,7 @@ function showPage() {
     document.getElementById('pageTitle').style.display = "block";
     document.getElementById('mainSection').style.display = "block";
     document.getElementById('sessionsSection').style.display = "block";
+    document.getElementById('noticesSection').style.display = "block";
 }
 
 //Turns off animation and shows error message
@@ -66,17 +67,24 @@ async function showNotices(name) {
 
 function fillNotices(notices) {
   let topNotices = []
+  console.log(notices)
   if (notices.length > 4) {
     topNotices = sortNotices(notices)
   } else {
     notices.forEach((notice) => topNotices.push(notice.message))
   }
+  console.log(`I am the notices: ${topNotices}`)
   for (i = 0; i < 4; i++) {
     if (topNotices[i]) {
-      document.getElementById(`message${i}`).innerHTML = topNotices[i]
+    	document.getElementById(`message${i+1}`).innerHTML = topNotices[i]
     } else {document.getElementById(`message${i}`).innerHTML = " "}
   }
 } 
+
+function parse (string) {
+	let parse = new DOMParser
+  
+}
 
 function sortNotices(notices) {
   let topNotices = []
@@ -98,3 +106,4 @@ function convertToDates(notices) {
   notices.forEach((notice) => dates.push(notice.date))
   return dates
 }
+
