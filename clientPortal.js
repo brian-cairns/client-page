@@ -65,9 +65,16 @@ async function showNotices(name) {
 }
 
 function fillNotices(notices) {
-  const topNotices = sortNotices(notices)
+  let topNotices = []
+  if (notices.length > 4) {
+    topNotices = sortNotices(notices)
+  } else {
+    notices.forEach((notice) => topNotices.push(notice.message))
+  }
   for (i = 0; i < 4; i++) {
-    document.getElementById(`message${i}`).innerHTML = topNotices[i]
+    if (topNotices[i]) {
+      document.getElementById(`message${i}`).innerHTML = topNotices[i]
+    } else {document.getElementById(`message${i}`).innerHTML = " "}
   }
 } 
 
