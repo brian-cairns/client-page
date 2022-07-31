@@ -5,7 +5,7 @@ document.getElementById('sessionsSection').style.display = "none";
 document.getElementById('noticesSection').style.display = "none";
 
 //Get the data to populate the field
-sessionStorage.getItem('userName');
+let username = sessionStorage.getItem('userName');
 document.getElementById('clientName').innerHTML = userName
 const url = 'https://pffm.azurewebsites.net/client'
 const uri = `${url}/?name=${userName}`
